@@ -84,8 +84,8 @@ async function checkMailbox() {
     const reviewCode = codeMatch[0];
     console.log(`Extracted review code: ${reviewCode}`);
     
-    // 2. Lookup player_id from backend
-    let playerId = null;
+    // 2. Lookup reviewer_contact from backend
+    let reviewerContact = null;
     try {
       const lookupResponse = await fetch(`${BACKEND_URL}/api/internal/lookup-code?code=${reviewCode}`, {
         headers: { 'X-Bot-Secret': BOT_SECRET }
@@ -93,12 +93,12 @@ async function checkMailbox() {
       
       if (lookupResponse.ok) {
         const data = await lookupResponse.json();
-        playerId = data.player_id;
+        reviewerContact = data.reviewer_contact;
       } else {
         console.error(`Code lookup failed for ${reviewCode} (status ${lookupResponse.status})`);
         // Log a failed bite with status "invalid_code"
         await reportBite({
-          player_id: null,
+          reviewer_contact: null,
           review_code: reviewCode,
           phished_url: 'N/A',
           status: 'invalid_code',
@@ -109,7 +109,7 @@ async function checkMailbox() {
       console.error('Error contacting backend for code lookup:', err);
     }
 
-    if (!playerId) {
+    if (!reviewerContact) {
       // If code lookup failed, we've already logged/skipped. Move on.
       await markProcessed(emailId);
       continue;
@@ -120,7 +120,7 @@ async function checkMailbox() {
     if (!linkMatch) {
       console.log('No links found in the email body.');
       await reportBite({
-        player_id: playerId,
+        reviewer_contact: reviewerContact,
         review_code: reviewCode,
         phished_url: 'N/A',
         status: 'failed',
@@ -134,7 +134,7 @@ async function checkMailbox() {
     console.log(`Extracted target link: ${targetUrl}`);
     
     // 4. Visit the link using Playwright
-    await visitPhishingLink(playerId, reviewCode, targetUrl);
+    await visitPhishingLink(reviewerContact, reviewCode, targetUrl);
     
     // 5. Mark as processed
     await markProcessed(emailId);
@@ -149,7 +149,7 @@ async function markProcessed(emailId) {
   }
 }
 
-async function visitPhishingLink(playerId, reviewCode, url) {
+async function visitPhishingLink(reviewerContact, reviewCode, url) {
   console.log(`Launching Playwright to visit: ${url}`);
   let browser;
   try {
@@ -193,7 +193,7 @@ async function visitPhishingLink(playerId, reviewCode, url) {
     
     // Report success
     await reportBite({
-      player_id: playerId,
+      reviewer_contact: reviewerContact,
       review_code: reviewCode,
       phished_url: url,
       status: 'success'
@@ -202,7 +202,7 @@ async function visitPhishingLink(playerId, reviewCode, url) {
   } catch (error) {
     console.error(`Failed to execute phishing simulation for ${url}:`, error.message);
     await reportBite({
-      player_id: playerId,
+      reviewer_contact: reviewerContact,
       review_code: reviewCode,
       phished_url: url,
       status: 'failed',
