@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const reviewerUsername = document.getElementById('reviewer-username');
-    const flagPlaceholder = document.getElementById('flag-placeholder');
     const requestsTbody = document.getElementById('requests-tbody');
     const logoutBtn = document.getElementById('logout-btn');
 
@@ -27,7 +26,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Render data
         reviewerUsername.textContent = data.reviewer_name;
-        flagPlaceholder.textContent = data.flag;
+
+        // Render decorative divider (morse code)
+        const themePattern = data.theme_pattern;
+        if (themePattern) {
+            const separator = document.getElementById('content-separator');
+            let html = '';
+            for (const char of themePattern) {
+                if (char === '.') html += '<span class="cs-a"></span>';
+                else if (char === '-') html += '<span class="cs-b"></span>';
+                else if (char === ' ') html += '<span class="cs-gap"></span>';
+                else if (char === '/') html += '<span class="cs-word-gap"></span>';
+            }
+            separator.innerHTML = html;
+        }
 
         // Render mock pending requests
         if (data.pending_requests && data.pending_requests.length > 0) {
