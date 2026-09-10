@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             const separator = document.getElementById('content-separator');
             let html = '';
             for (const char of themePattern) {
-                if (char === '.') html += '<span class="cs-a"></span>';
-                else if (char === '-') html += '<span class="cs-b"></span>';
-                else if (char === ' ') html += '<span class="cs-gap"></span>';
-                else if (char === '/') html += '<span class="cs-word-gap"></span>';
+                if (char === '.') html += '<span class="cs-a">.</span>';
+                else if (char === '-') html += '<span class="cs-b">-</span>';
+                else if (char === ' ') html += '<span class="cs-gap"> </span>';
+                else if (char === '/') html += '<span class="cs-word-gap"> / </span>';
             }
             separator.innerHTML = html;
         }

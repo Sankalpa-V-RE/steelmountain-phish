@@ -24,27 +24,31 @@
         <div class="panel">
             <div class="panel-header">Pending Manual Identity Verification Requests</div>
             <div class="panel-body">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Request ID</th>
-                            <th>Target Username</th>
-                            <th>Workflow Status</th>
-                            <th>Submission Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="requests-tbody">
-                        <tr>
-                            <td colspan="5" style="text-align: center; color: #666666;">Loading active workflows...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Target Username</th>
+                                <th>Workflow Status</th>
+                                <th>Submission Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requests-tbody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #666666;">Loading active workflows...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    
     <div id="content-separator" class="content-separator"></div>
+    <div class="legacy-notice">
+        SM-IDV Reviewer Console is currently operating on infrastructure scheduled for migration in Q3. Some legacy session indicators, including the connection status bar below, are retained for backward compatibility with older audit tooling and may be deprecated in a future release. Reviewers experiencing display issues with this panel should continue using standard workflow procedures; known display inconsistencies do not affect the accuracy of submitted verification decisions. For questions regarding this console's technical status, contact IT Operations.
+    </div>
 
     <div class="footer-bar">
         <div class="footer-bar-inner">

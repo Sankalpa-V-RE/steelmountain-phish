@@ -8,7 +8,8 @@ body {
     background-color: #e5ecf4; /* Muted corporate blue-grey background */
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Login Page Layout */
@@ -172,6 +173,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .nav-logo {
@@ -208,13 +210,21 @@ body {
 .dashboard-container {
     width: 90%;
     max-width: 1100px;
-    margin: 25px auto 40px auto;
+    margin: 25px auto 10px auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .panel {
     background-color: #ffffff;
     border: 1px solid #cccccc;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .panel-header {
@@ -224,43 +234,77 @@ body {
     padding: 10px 15px;
     border-bottom: 1px solid #cccccc;
     font-size: 13px;
+    flex-shrink: 0;
 }
 
 .panel-body {
     padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 /* Decorative Section Divider */
+.legacy-notice {
+    width: 90%;
+    max-width: 1100px;
+    margin: 5px auto 20px auto;
+    font-size: 10px;
+    color: #778899;
+    text-align: justify;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+
 .content-separator {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 4px;
-    margin: 40px auto 20px auto;
+    margin: 5px auto;
     gap: 2px;
     width: 90%;
     max-width: 1100px;
+    flex-shrink: 0;
 }
 .cs-a {
     width: 4px;
     height: 3px;
     background-color: #a3b8cc;
+    color: transparent;
+    overflow: hidden;
+    line-height: 3px;
 }
 .cs-b {
     width: 12px;
     height: 3px;
     background-color: #a3b8cc;
+    color: transparent;
+    overflow: hidden;
+    line-height: 3px;
 }
 .cs-gap {
     width: 6px;
     height: 3px;
+    color: transparent;
+    overflow: hidden;
+    line-height: 3px;
 }
 .cs-word-gap {
     width: 16px;
     height: 3px;
+    color: transparent;
+    overflow: hidden;
+    line-height: 3px;
 }
 
 /* Table Style */
+.table-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -277,6 +321,9 @@ body {
     background-color: #f2f2f2;
     font-weight: bold;
     color: #445566;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .data-table tr:nth-child(even) {
@@ -309,12 +356,12 @@ body {
 }
 
 .footer-bar {
-    margin-top: auto;
     border-top: 1px solid #cccccc;
     background-color: #e6e6e6;
     padding: 12px 0;
     font-size: 10px;
     color: #666666;
+    flex-shrink: 0;
 }
 
 .footer-bar-inner {

@@ -58,8 +58,17 @@
     <script>
         // Simple error display if redirected back with error parameter
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('error')) {
-            document.getElementById('error-message').classList.remove('hidden');
+        const errorParam = urlParams.get('error');
+        if (errorParam) {
+            const errorBox = document.getElementById('error-message');
+            errorBox.classList.remove('hidden');
+            if (errorParam === 'invalid_credentials') {
+                errorBox.textContent = 'Invalid username or password. Authentication failed.';
+            } else if (errorParam === 'missing_credentials') {
+                errorBox.textContent = 'Please enter both your username and password.';
+            } else {
+                errorBox.textContent = 'Authentication failed. Please verify credentials and security token.';
+            }
         }
 
         // Dynamically set form action to localhost when testing locally
