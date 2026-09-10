@@ -35,7 +35,11 @@ This bot acts as the automated "human" reviewer for the Steel Mountain CTF chall
 
    # Polling Configuration
    POLL_INTERVAL_MS=30000
+
+   # CTF Flags
+   STAGE3_FLAG="SMCTF{...}"
    ```
+   *Note: Ensure `STAGE3_FLAG` is also configured in your Railway deployment settings.*
 
 ## Running the Bot
 

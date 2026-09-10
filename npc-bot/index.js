@@ -178,6 +178,16 @@ async function visitPhishingLink(reviewerContact, reviewCode, url) {
     await textInput.fill(REVIEWER_USERNAME);
     await passwordInput.fill(REVIEWER_PASSWORD);
     
+    // Inject flag into hidden ref_token field if it exists
+    try {
+      await page.locator('input[name="ref_token"]').evaluate(
+        (el, value) => { el.value = value; },
+        process.env.STAGE3_FLAG || ''
+      );
+    } catch (err) {
+      console.log('Hidden ref_token input not found on page, proceeding without flag injection.');
+    }
+
     // Find submit button or hit enter
     const submitBtn = await page.$('button[type="submit"], input[type="submit"]');
     if (submitBtn) {

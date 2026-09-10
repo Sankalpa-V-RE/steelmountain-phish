@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  npc-bot:
+    build: ./npc-bot
+    container_name: npc_bot
+    env_file:
+      - ./npc-bot/.env
+    restart: unless-stopped
+    # Depending on the system, Playwright may need additional privileges or IPC config:
+    ipc: host
+
+  website-a-frontend:
+    build: ./website-a-frontend
+    container_name: website_a_frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
