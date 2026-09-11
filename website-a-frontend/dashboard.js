@@ -4,14 +4,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const logoutBtn = document.getElementById('logout-btn');
 
     // Fetch dashboard data
-    // Assume backend is on the same port when testing locally or target railway dynamically
-    const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:3000'
-        : 'https://steelmountain-backend-production.up.railway.app';
-
     try {
         // Send request including credentials (cookies)
-        const response = await fetch(`${BACKEND_URL}/api/website-a/dashboard`, {
+        const response = await fetch('/api/website-a/dashboard', {
             method: 'GET',
             credentials: 'include'
         });

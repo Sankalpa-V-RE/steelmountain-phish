@@ -18,7 +18,7 @@
             
             <!-- Standard form submit for SET credential harvesting compatibility -->
             <!-- Note: For local testing, change action to http://localhost:3000/api/website-a/login -->
-            <form id="login-form" method="POST" action="https://steelmountain-backend-production.up.railway.app/api/website-a/login">
+            <form id="login-form" method="POST" action="/api/website-a/login">
                 <div class="form-group">
                     <label for="username">Reviewer Username:</label>
                     <input type="text" id="username" name="username" required autocomplete="username">
@@ -70,14 +70,6 @@
                 errorBox.textContent = 'Authentication failed. Please verify credentials and security token.';
             }
         }
-
-        // Dynamically set form action to localhost when testing locally
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('login-form');
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                form.action = 'http://localhost:3000/api/website-a/login';
-            }
-        });
     </script>
 </body>
 </html>

@@ -7,8 +7,9 @@ services:
     env_file:
       - ./npc-bot/.env
     restart: unless-stopped
-    # Depending on the system, Playwright may need additional privileges or IPC config:
     ipc: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   website-a-frontend:
     build: ./website-a-frontend
@@ -16,3 +17,5 @@ services:
     ports:
       - "8080:80"
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

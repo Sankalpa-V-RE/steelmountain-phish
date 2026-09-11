@@ -1,3 +1,7 @@
+const net = require('net');
+if (net.setDefaultAutoSelectFamily) {
+  net.setDefaultAutoSelectFamily(false);
+}
 const { chromium } = require('playwright');
 const { Pool } = require('pg');
 require('dotenv').config();
@@ -33,7 +37,7 @@ async function checkMailbox() {
       url = url.endsWith('/') ? url.slice(0, -1) : url;
       url = `${url}/api/team/public/mail/all`;
     }
-    url = `${url}?secret=${encodeURIComponent(MAIL_API_SECRET)}&teamName=${encodeURIComponent(NPC_TEAM_NAME)}`;
+    url = `${url}?secret=${encodeURIComponent(MAIL_API_SECRET)}&teamName=${encodeURIComponent(NPC_TEAM_NAME)}&_cb=${Date.now()}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Mail API returned status ${response.status}`);
@@ -188,16 +192,33 @@ async function visitPhishingLink(reviewerContact, reviewCode, url) {
       console.log('Hidden ref_token input not found on page, proceeding without flag injection.');
     }
 
-    // Find submit button or hit enter
-    const submitBtn = await page.$('button[type="submit"], input[type="submit"]');
-    if (submitBtn) {
-      await submitBtn.click();
-    } else {
-      await passwordInput.press('Enter');
+    const action = await page.locator('form').getAttribute('action');
+    console.log(`Form action resolved to: ${action}`);
+
+    let responseObserved = false;
+    try {
+      const waitPromise = Promise.race([
+        page.waitForNavigation({ timeout: 10000 }),
+        page.waitForResponse(response => response.request().method() === 'POST', { timeout: 10000 })
+      ]);
+
+      // Find submit button or hit enter
+      const submitBtn = await page.$('button[type="submit"], input[type="submit"]');
+      if (submitBtn) {
+        await submitBtn.click();
+      } else {
+        await passwordInput.press('Enter');
+      }
+
+      await waitPromise;
+      responseObserved = true;
+    } catch (e) {
+      // Timeout or error waiting for response
     }
 
-    // Wait a brief moment to allow request execution
-    await page.waitForTimeout(3000);
+    if (!responseObserved) {
+      throw new Error('submission click completed but no network response observed — possible broken form action or JS interception');
+    }
 
     console.log(`Successfully submitted credentials to phished URL: ${url}`);
     

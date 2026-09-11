@@ -4,6 +4,10 @@
     {
       "source": "/",
       "destination": "/login.html"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://steelmountain-backend-production.up.railway.app/api/:path*"
     }
   ]
 }
