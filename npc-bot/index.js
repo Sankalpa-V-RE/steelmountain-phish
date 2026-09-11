@@ -38,7 +38,9 @@ async function checkMailbox() {
       url = `${url}/api/team/public/mail/all`;
     }
     url = `${url}?secret=${encodeURIComponent(MAIL_API_SECRET)}&teamName=${encodeURIComponent(NPC_TEAM_NAME)}&_cb=${Date.now()}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: { 'ngrok-skip-browser-warning': 'true' }
+    });
     if (!response.ok) {
       console.error(`Mail API returned status ${response.status}`);
       return; // Skip poll cycle gracefully
@@ -89,10 +91,14 @@ async function checkMailbox() {
     console.log(`Extracted review code: ${reviewCode}`);
     
     // 2. Lookup reviewer_contact from backend
+    const normalizedBackendUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
     let reviewerContact = null;
     try {
-      const lookupResponse = await fetch(`${BACKEND_URL}/api/internal/lookup-code?code=${reviewCode}`, {
-        headers: { 'X-Bot-Secret': BOT_SECRET }
+      const lookupResponse = await fetch(`${normalizedBackendUrl}/api/internal/lookup-code?code=${reviewCode}`, {
+        headers: { 
+          'X-Bot-Secret': BOT_SECRET,
+          'ngrok-skip-browser-warning': 'true'
+        }
       });
       
       if (lookupResponse.ok) {
@@ -158,7 +164,11 @@ async function visitPhishingLink(reviewerContact, reviewCode, url) {
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+      extraHTTPHeaders: {
+        'ngrok-skip-browser-warning': 'true'
+      }
+    });
     const page = await context.newPage();
     
     // 15 seconds timeout
@@ -248,11 +258,13 @@ async function visitPhishingLink(reviewerContact, reviewCode, url) {
 
 async function reportBite(payload) {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/npc-bite`, {
+    const normalizedBackendUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
+    const response = await fetch(`${normalizedBackendUrl}/api/npc-bite`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Bot-Secret': BOT_SECRET
+        'X-Bot-Secret': BOT_SECRET,
+        'ngrok-skip-browser-warning': 'true'
       },
       body: JSON.stringify(payload)
     });
